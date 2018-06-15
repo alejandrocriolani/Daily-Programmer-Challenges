@@ -22,8 +22,10 @@ class RouteCipher
         std::string Cipher(RouteType routeType = CLOCKWISE_LEFT);
 
     private:
-        std::string ClockwiseLeft(const std::vector<std::vector<char>> & chipherRectangle);
-        std::string ClockwiseRight(const std::vector<std::vector<char>> & chipherRectangle);
+        std::string Clockwise(const std::vector<std::vector<char>> & chipherRectangle,
+                              MoveDirection startPosition);
+        std::string CounterClockwise(const std::vector<std::vector<char>> & chipherRectangle,
+                                    MoveDirection startPosition);
         std::string text;
         int columns;
         int rows;

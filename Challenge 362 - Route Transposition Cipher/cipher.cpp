@@ -52,32 +52,51 @@ std::string RouteCipher::Cipher(RouteType routeType)
     switch(routeType)
     {
         case CLOCKWISE_LEFT:
-            cipherText = ClockwiseLeft(chipherRectangle);
+            cipherText = Clockwise(chipherRectangle, LEFT);
             break;
         case CLOCKWISE_RIGHT:
-            cipherText = ClockwiseRight(chipherRectangle);
+            cipherText = Clockwise(chipherRectangle, RIGHT);
+            break;
+        case COUNTERCLOCKWISE_LEFT:
+            cipherText = CounterClockwise(chipherRectangle, LEFT);
+            break;
+        case COUNTERCLOCKWISE_RIGHT:
+            cipherText = CounterClockwise(chipherRectangle, RIGHT);
             break;
         default:
-            std::cout << "Not Implemented";
+            std::cout << "ERROR";
     }
     
     
     return cipherText;
 }
 
-std::string RouteCipher::ClockwiseLeft(const std::vector<std::vector<char>> & chipherRectangle)
+std::string RouteCipher::Clockwise(const std::vector<std::vector<char>> & chipherRectangle,
+                                       MoveDirection startPosition)
 {
-
-    int chipherRectangleArea = rows * columns;
-    std::string cipherText = "";
-
     int topLimit = 0;
     int leftLimit = 0;
     int bottomLimit = rows - 1;
     int rightLimit = columns - 1;
-    MoveDirection moveDirection = RIGHT;
+    int j, k;
+    int chipherRectangleArea = rows * columns;
+    std::string cipherText = "";
+    MoveDirection moveDirection;
 
-    for(int i = 0, j = 0, k = 0; i < chipherRectangleArea; i++)
+    switch(startPosition)
+    {
+        case LEFT:
+            moveDirection = RIGHT;
+            j = k = 0;
+            break;
+        case RIGHT:
+            moveDirection = DOWN;
+            j = 0;
+            k = columns - 1;
+            break;
+    }
+
+    for(int i = 0; i < chipherRectangleArea; i++)
     {
         cipherText += chipherRectangle[j][k];
         switch(moveDirection)
@@ -116,22 +135,35 @@ std::string RouteCipher::ClockwiseLeft(const std::vector<std::vector<char>> & ch
                 break;
         }
     }
-
     return cipherText;
 }
 
-std::string RouteCipher::ClockwiseRight(const std::vector<std::vector<char>> & chipherRectangle)
+std::string RouteCipher::CounterClockwise(const std::vector<std::vector<char>> & chipherRectangle,
+                                          MoveDirection startPosition)
 {
-    int chipherRectangleArea = rows * columns;
-    std::string cipherText = "";
-
     int topLimit = 0;
     int leftLimit = 0;
     int bottomLimit = rows - 1;
     int rightLimit = columns - 1;
-    MoveDirection moveDirection = DOWN;
+    int j, k;
+    int chipherRectangleArea = rows * columns;
+    std::string cipherText = "";
+    MoveDirection moveDirection;
 
-    for(int i = 0, j = 0, k = columns - 1; i < chipherRectangleArea; i++)
+    switch(startPosition)
+    {
+        case LEFT:
+            moveDirection = DOWN;
+            j = k = 0;
+            break;
+        case RIGHT:
+            moveDirection = LEFT;
+            j = 0;
+            k = columns - 1;
+            break;
+    }
+
+    for(int i = 0; i < chipherRectangleArea; i++)
     {
         cipherText += chipherRectangle[j][k];
         switch(moveDirection)
@@ -140,36 +172,35 @@ std::string RouteCipher::ClockwiseRight(const std::vector<std::vector<char>> & c
                 k++;
                 if(k == rightLimit)
                 {
-                    moveDirection = DOWN;
-                    topLimit++;
+                    moveDirection = UP;
+                    bottomLimit--;
                 }
                 break;
             case LEFT:
                 k--;
                 if(k == leftLimit)
                 {
-                    moveDirection = UP;
-                    bottomLimit--;
+                    moveDirection = DOWN;
+                    topLimit++;
                 }
                 break;
             case UP:
                 j--;
                 if(j == topLimit)
                 {
-                    moveDirection = RIGHT;
-                    leftLimit++;
+                    moveDirection = LEFT;
+                    rightLimit--;
                 }
                 break;
             case DOWN:
                 j++;
                 if(j == bottomLimit)
                 {
-                    moveDirection = LEFT;
-                    rightLimit--;
+                    moveDirection = RIGHT;
+                    leftLimit++;
                 }
                 break;
         }
     }
-
     return cipherText;
 }
