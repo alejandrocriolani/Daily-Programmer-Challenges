@@ -1,0 +1,48 @@
+#include <iostream>
+using std::cout;
+using std::cerr;
+using std::endl;
+using std::ios;
+using std::getline;
+
+#include <fstream>
+using std::ifstream;
+using std::wifstream;
+
+#include <iomanip>
+using std::setw;
+
+#include <string>
+using std::string;
+using std::wstring;
+
+void imprimirLinea(string name, string date_of_birth, string date_of_death, string location_of_death)
+{
+  //cout << setw(25);
+  cout << name << " " << date_of_birth << " "<< date_of_death << " " << location_of_death << endl;
+}
+
+int main()
+{
+  ifstream file;
+  file.open("presidents.csv", ios::in);
+
+  if(!file.is_open())
+  {
+    cerr << "No se pudo abrir el archivo correctamente" << endl;
+    return 1;
+  }
+
+  string name, date_of_birth, date_of_death, location_of_death;
+
+  while(!file.eof())
+  {
+    getline(file, name, ',');
+    getline(file, date_of_birth, ',');
+    getline(file, date_of_death, ',');
+    getline(file, location_of_death, ',');
+    imprimirLinea(name, date_of_birth, date_of_death, location_of_death);
+  }
+
+  return 0;
+}
